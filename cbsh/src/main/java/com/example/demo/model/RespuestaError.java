@@ -1,11 +1,11 @@
 package com.example.demo.model;
 
+import lombok.Builder;
 import lombok.Data;
 import java.util.Map;
 
 @Data
+@Builder
 public class RespuestaError {
-    private int estatus;
-    private Map<String,String> errores;
-    private String ruta;
+    private String mensaje;
 }

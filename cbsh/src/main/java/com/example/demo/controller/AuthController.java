@@ -6,7 +6,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.demo.model.Usuario;
 import com.example.demo.util.Result;
@@ -22,14 +24,15 @@ public class AuthController {
     }
 
     @PostMapping("/auth/login")
-    public ResponseEntity token(Usuario usuario) {
-        Result<String> generarToken = tokenService.generateToken(usuario);
+    public ResponseEntity<AuthResponse> token(@RequestBody AuthRequest authRequest) throws Exception {
+
+        Result<String> generarToken = tokenService.generateToken(authRequest.getNombre(), authRequest.getContrasenia());
 
         if(!generarToken.fueExitoso()){
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(generarToken.getMensajeError());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, generarToken.getMensajeError());
         }
     
-        return ResponseEntity.status(HttpStatus.OK).body(generarToken.getResultado());
+        return ResponseEntity.ok(AuthResponse.builder().token(generarToken.getResultado()).build());
     }
 
 }

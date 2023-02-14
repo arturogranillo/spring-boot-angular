@@ -11,53 +11,22 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.Map;
 import java.util.TreeMap;
 
 @RestControllerAdvice
-public class ManejadorGlobalExcepciones extends ResponseEntityExceptionHandler {
-    
-    @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-                                                                  HttpHeaders headers,
-                                                                  HttpStatusCode status,
-                                                                  WebRequest request){
-        Map<String,String> errors = new TreeMap<>();
-        for (FieldError error : ex.getBindingResult().getFieldErrors()){
-            errors.put(error.getField(), error.getDefaultMessage());
-        }
-        for (ObjectError error : ex.getBindingResult().getGlobalErrors()){
-            errors.put(error.getObjectName(), error.getDefaultMessage());
-        }
+public class ManejadorGlobalExcepciones {
 
-        RespuestaError respuestaError = new RespuestaError();
-        respuestaError.setErrores(errors);
-        respuestaError.setRuta(request.getDescription(false).substring(4));
-        return handleExceptionInternal(ex,respuestaError,headers, HttpStatus.BAD_REQUEST, request);
-    }
+    @ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<RespuestaError> handleStatusException(ResponseStatusException ex){
+        RespuestaError respuesta = RespuestaError.builder()
+            .mensaje(ex.getReason())
+            .build();
 
-    @Override
-    protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException ex,
-                                                                         HttpHeaders headers,
-                                                                         HttpStatusCode status,
-                                                                         WebRequest request) {
-
-        Map<String, String> errors = new TreeMap<>();
-
-        StringBuilder builder = new StringBuilder();
-        builder.append("El método ");
-        builder.append(ex.getMethod());
-        builder.append(" no está soportado para esta petición. Los métodos soportados son ");
-
-        ex.getSupportedHttpMethods().forEach(t -> builder.append(t + " "));
-
-        errors.put("Error", builder.toString());
-        RespuestaError respuestaError = new RespuestaError();
-        respuestaError.setErrores(errors);
-        respuestaError.setRuta(request.getDescription(false).substring(4));
-
-        return new ResponseEntity<Object>(respuestaError, headers, HttpStatus.METHOD_NOT_ALLOWED);
+        return ResponseEntity.badRequest().body(respuesta);
     }
 }

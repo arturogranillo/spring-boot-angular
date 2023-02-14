@@ -31,14 +31,14 @@ public class TokenService {
         this.usuarioRepository = usuarioRepository;
     }
 
-    public Result<String> generateToken(Usuario usuario) {
+    public Result<String> generateToken(String usuario, String contrasenia) {
 
-        Optional<Usuario> posibleUsuario = usuarioRepository.findByNombre(usuario.getNombre());
+        Optional<Usuario> posibleUsuario = usuarioRepository.findByNombre(usuario);
         if(posibleUsuario.isEmpty()){
             return Result.fallo("El usuario no existe.");
         }
 
-        if(!posibleUsuario.get().getContrasenia().equals(usuario.getContrasenia())){
+        if(!posibleUsuario.get().getContrasenia().equals(contrasenia)){
             return Result.fallo("Contraseña incorrecta");
         }
 
@@ -47,7 +47,7 @@ public class TokenService {
                 .issuer("self")
                 .issuedAt(now)
                 .expiresAt(now.plus(1, ChronoUnit.HOURS))
-                .subject(usuario.getNombre())
+                .subject(usuario)
                 .claim("scope", "")
                 .build();
         String token = this.encoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
