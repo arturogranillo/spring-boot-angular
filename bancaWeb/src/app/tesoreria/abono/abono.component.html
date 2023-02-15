@@ -1,0 +1,17 @@
+<h5>Abono</h5> 
+<div class="p-grid p-fluid">
+    <div class="col-12 md:col-4">
+        <div class="p-inputgroup">
+            <span class="p-inputgroup-addon">Cuenta</span>
+            <p-inputMask mask="999-999-999" placeholder="999-999-999"></p-inputMask>       
+        </div>
+    </div>
+    <div class="col-12 md:col-4">
+        <div class="p-inputgroup">
+            <span class="p-inputgroup-addon">Importe</span>
+            <p-inputNumber mode="currency" currency="USD" locale="en-US"></p-inputNumber>   
+        </div>
+    </div>
+</div>
+
+<button pButton type="button" label="Regresar" class="p-button-secondary" [routerLink]="['/tesoreria']"></button>
