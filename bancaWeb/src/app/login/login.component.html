@@ -1,0 +1,16 @@
+<h5>Login</h5>
+<div class="p-grid p-fluid">
+    <div class="p-col-12">
+        <div class="p-inputgroup">
+            <span class="p-inputgroup-addon">Usuario</span>
+            <input type="text" pInputText placeholder="Usuario" [(ngModel)]="usuario">         
+        </div>
+    </div>
+    <div class="p-col-12">
+        <div class="p-inputgroup">
+            <span class="p-inputgroup-addon">Contraseña</span>
+            <input type="text" pInputText placeholder="Contraseña" [(ngModel)]="password">      
+        </div>
+    </div>
+    <button pButton type="button" label="Entrar" class="p-button-success" (click)="login()"></button>
+</div>
