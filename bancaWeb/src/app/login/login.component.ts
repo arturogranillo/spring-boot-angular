@@ -19,8 +19,10 @@ export class LoginComponent {
     console.log(this.usuario);
     console.log(this.password);
 
-    this.apiService.login(this.usuario, this.password).subscribe( respuesta => {
+    this.apiService.login(this.usuario, this.password).subscribe( (respuesta:any) => {
       alert("Bienvenido");
+      const { token } = respuesta;
+      this.apiService.token = token;
       this.router.navigate(['/tesoreria']);
     }, (err) => {
       alert(err.error.mensaje);
