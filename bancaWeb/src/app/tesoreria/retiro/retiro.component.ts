@@ -3,11 +3,11 @@ import { Router } from '@angular/router';
 import { BancaApiService } from 'src/app/services/banca-api.service';
 
 @Component({
-  selector: 'app-abono',
-  templateUrl: './abono.component.html',
-  styleUrls: ['./abono.component.css']
+  selector: 'app-retiro',
+  templateUrl: './retiro.component.html',
+  styleUrls: ['./retiro.component.css']
 })
-export class AbonoComponent {
+export class RetiroComponent {
 
   cuenta!: String;
   monto!: String;
@@ -15,11 +15,11 @@ export class AbonoComponent {
   constructor(private apiService: BancaApiService, private router: Router) {
   }
 
-  abono(){
+  procesar(){
     console.log(this.cuenta);
     console.log(this.monto);
 
-    this.apiService.abono(this.cuenta, this.monto).subscribe( (respuesta:any) => {
+    this.apiService.retiro(this.cuenta, this.monto).subscribe( (respuesta:any) => {
       alert("Su nuevo saldo es: " + respuesta.saldo);
       this.router.navigate(['/tesoreria']);
     }, (err) => {

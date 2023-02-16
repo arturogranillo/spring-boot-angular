@@ -17,11 +17,15 @@ import {InputNumberModule} from 'primeng/inputnumber';
 import { PrincipalComponent } from './principal/principal.component';
 
 import { RouterModule } from '@angular/router';
+import { RetiroComponent } from './retiro/retiro.component';
+import { TransferenciaComponent } from './transferencia/transferencia.component';
 
 @NgModule({
   declarations: [
     AbonoComponent,
-    PrincipalComponent
+    PrincipalComponent,
+    RetiroComponent,
+    TransferenciaComponent
   ],
   imports: [
     CommonModule,
